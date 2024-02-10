@@ -1,12 +1,10 @@
+#file: noinspection YAMLSchemaValidation
 
-version: "3.9"
+version: "3.3"
 
 
 services:
 
-  bot:
+  bot9:
     build: ./
     restart: unless-stopped
-
-
-    

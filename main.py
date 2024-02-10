@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 import sqlalchemy as sq
 from sqlalchemy.orm import sessionmaker
+from datetime import datetime
 
 from models import Subscrybers, PG_DSN
 from weather import get_weather, url
@@ -41,6 +42,26 @@ def weather(message):
 @bot.message_handler(commands=['ping'])
 def ping(message):
     bot.send_message(message.chat.id, "Я работаю")
+
+@bot.message_handler(commands=['time'])
+def ping(message):
+    alarm = int(os.getenv('RING_TIME').split(':')[0])
+    now = datetime.now().hour
+    if now >= alarm:
+        time = 24-int(now)+int(alarm)
+    else:
+        time = alarm-now
+
+
+    bot.send_message(message.chat.id, f"До будильника осталось {time} часов")
+
+@bot.message_handler(commands=['help'])
+def ping(message):
+    text = '''/time - показывает сколько часов осталось до будильника
+/ping - проверяет работоспособность сервиса
+/weather - принудительно проверяет погоду 
+/start - добавляет подписчиков'''
+    bot.send_message(message.chat.id, text)
 
 bot.polling(none_stop=True)
 
